@@ -1,60 +1,48 @@
-# Time Series App
+# Giới thiệu
+Đây là github repo chứa mã nguồn cho lộ trình học python backend 
+Lộ trình này có thể tìm thấy trên trang web https://vimentor.com ở đường dẫn sau: https://vimentor.com/vi/learning-path/lo-trinh-hoc-python-cho-ky-su-backend?type=lesson
+Group facebôk để thảo luận các vấn đề liên quan tới lộ trình học: https://www.facebook.com/groups/711152479268593/
 
-[![PyPI version](https://badge.fury.io/py/ts-app.svg)](https://badge.fury.io/py/ts-app)
-[![Python application](https://github.com/Tim-Abwao/time-series-app/actions/workflows/python-app.yml/badge.svg)](https://github.com/Tim-Abwao/time-series-app/actions/workflows/python-app.yml)
+# Cách chạy ứng dụng trên host 
+### Yêu cầu 
+- Ứng dụng này được viết theo python3. Nên để chạy được ứng dụng cần phải cài đặt python3 và pip3 và một số gói khác
 
-A dashboard application to learn a little about, and apply *[Time Series][wiki_time_series] analysis* & *forecasting*.
+        sudo unlink /etc/localtime 
+        sudo ln -s /usr/share/zoneinfo/Etc/GMT+7 /etc/localtime
+        sudo apt update 
+        sudo apt install -y git python3 python3-pip libsm6 libxext6 libfontconfig1 libxrender1 python3-tk
+        
+- Chú ý: Trong bước "sudo unlink /etc/localtime" có thể báo lỗi nếu file /etc/localtime không tồn tại. Lệnh "sudo ln -s /usr/share/zoneinfo/Etc/GMT+7 /etc/localtime" cũng có thể báo lỗi nếu file /etc/localtime đã tồn tại. Nếu xảy ra hai lỗi này, hãy bỏ qua nó và chạy tiếp những lệnh sau. Chương trình vẫn có thể hoạt động bình thường.
+### Cài các gói phụ trợ 
+- Chạy lệnh sau trong thư mục pythonbackenddemo để cài các gói phụ trợ 
 
-You can create a sample, or upload a file, and interactively fit a time series model on it.
+        pip3 install -r requirements.txt
+        
+### Chạy ứng dụng
+- Sau khi cài đặt cái gói phụ trợ bạn có thể chạy ứng dụng bằng lênh sau, chú ý là cần đứng trong thư mục chứa mã nguồn pythonbackenddemo khi chạy lệnh này
 
-The dashboard is built with [Dash][dash], and the time series models are fitted using [Statsmodels][statsmodels].
+        python3 house3d_worker_demo.py
 
-You can [try it out here][live-link].
+# Chạy ứng dụng trong docker container 
+### B1. Clone mã nguồn và chuyển về nhánh 6-gunicorn-flask
 
-[![screencast of the app](https://raw.githubusercontent.com/Tim-Abwao/time-series-app/master/dashboard.gif)][live-link]
+        git clone https://github.com/vimentor-com/pythonbackenddemo.git
+        cd pythonbackenddemo
+        git checkout 6-gunicorn-flask
 
-## Installation
+### B2. Build docker image với lệnh
 
-The easiest way to install the app is from [PyPI][pypi]:
+        sudo docker build . -t demoimg:v0.2
 
-```bash
-pip install ts-app
-```
+### B2. Khởi chạy docker container 
 
-You could also install it directly from the **GitHub** repository:
+        sudo docker run -it --name='pythonbackenddemo' -p 8000:8000 demoimg:v0.2 bash
 
-```bash
-pip install https://github.com/tim-abwao/time-series-app/archive/main.tar.gz
-```
+Log xuất hiện trên màn hình sau khi chạy docker container
 
-## Basic Usage
-
-The command `ts_app` launches the app:
-
-```bash
-$ ts_app -h
-usage: ts_app [-h] [-p PORT] [--host HOST] [--no-browser]
-
-A simple dashboard application to learn time series basics and interactively fit ARIMA models.
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -p PORT, --port PORT  The TCP port on which to listen (default: 8000).
-  --host HOST           A host-name or IP address (default: 'localhost').
-  --no-browser          Avoid openning a browser tab or window.
-```
-
-You can also start the app from an interactive session:
-
-```python
->>> import ts_app
->>> ts_app.run_app()
-```
-
-Afterwards, press `CTRL` + `C` to stop it.
-
-[wiki_time_series]: https://en.wikipedia.org/wiki/Time_series
-[live-link]: https://time-series-app.herokuapp.com
-[dash]: https://dash.plotly.com/
-[statsmodels]: https://www.statsmodels.org/stable/index.html
-[pypi]:  https://pypi.org/project/ts-app/
+        [2019-02-28 01:44:38 -0700] [6] [INFO] Starting gunicorn 19.9.0
+        [2019-02-28 01:44:38 -0700] [6] [INFO] Listening at: http://127.0.0.1:8000 (6)
+        [2019-02-28 01:44:38 -0700] [6] [INFO] Using worker: threads
+        [2019-02-28 01:44:38 -0700] [9] [INFO] Booting worker with pid: 9
+        [2019-02-28 01:44:38 -0700] [17] [INFO] Booting worker with pid: 17
+        [2019-02-28 01:44:38 -0700] [26] [INFO] Booting worker with pid: 26

@@ -1,11 +1,21 @@
-FROM python:3.8-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt \
-    # wait 2 mins before timing out in slow/unstable connections
-    -timeout=120  
-COPY ts_app ./ts_app
-EXPOSE 8000
-CMD waitress-serve --listen=0.0.0.0:8000 ts_app:server
- 
+FROM ubuntu:18.04
+
+RUN ln -s /usr/share/zoneinfo/Etc/GMT+7 /etc/localtime
+RUN apt update \
+    && apt install -y git python3 \
+    python3-pip \
+    libsm6 \
+    libxext6 \
+    libfontconfig1 \
+    libxrender1 \
+    python3-tk
+
+RUN git clone https://github.com/vimentor-com/pythonbackenddemo.git
+RUN cd pythonbackenddemo && \
+    git checkout 6-gunicorn-flask && \
+    pip3 install -r requirements.txt
+RUN mkdir -p ~/.config/matplotlib/
+RUN touch ~/.config/matplotlib/matplotlibrc
+RUN echo "backend: Agg" > ~/.config/matplotlib/matplotlibrc
+
+ENTRYPOINT ["/bin/bash", "/pythonbackenddemo/entrypoint.sh"]

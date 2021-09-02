@@ -1,48 +1,38 @@
-# Giới thiệu
-Đây là github repo chứa mã nguồn cho lộ trình học python backend 
-Lộ trình này có thể tìm thấy trên trang web https://vimentor.com ở đường dẫn sau: https://vimentor.com/vi/learning-path/lo-trinh-hoc-python-cho-ky-su-backend?type=lesson
-Group facebôk để thảo luận các vấn đề liên quan tới lộ trình học: https://www.facebook.com/groups/711152479268593/
+## Deploying ML Model using Flask
+This is a simple project to elaborate how to deploy a Machine Learning model using Flask API
 
-# Cách chạy ứng dụng trên host 
-### Yêu cầu 
-- Ứng dụng này được viết theo python3. Nên để chạy được ứng dụng cần phải cài đặt python3 và pip3 và một số gói khác
+### Prerequisites
+You must have Scikit Learn, Pandas (for Machine Leraning Model) and Flask (for API) installed.
 
-        sudo unlink /etc/localtime 
-        sudo ln -s /usr/share/zoneinfo/Etc/GMT+7 /etc/localtime
-        sudo apt update 
-        sudo apt install -y git python3 python3-pip libsm6 libxext6 libfontconfig1 libxrender1 python3-tk
-        
-- Chú ý: Trong bước "sudo unlink /etc/localtime" có thể báo lỗi nếu file /etc/localtime không tồn tại. Lệnh "sudo ln -s /usr/share/zoneinfo/Etc/GMT+7 /etc/localtime" cũng có thể báo lỗi nếu file /etc/localtime đã tồn tại. Nếu xảy ra hai lỗi này, hãy bỏ qua nó và chạy tiếp những lệnh sau. Chương trình vẫn có thể hoạt động bình thường.
-### Cài các gói phụ trợ 
-- Chạy lệnh sau trong thư mục pythonbackenddemo để cài các gói phụ trợ 
+Flask version: 0.12.2
+conda install flask=0.12.2  (or) pip install Flask==0.12.2
 
-        pip3 install -r requirements.txt
-        
-### Chạy ứng dụng
-- Sau khi cài đặt cái gói phụ trợ bạn có thể chạy ứng dụng bằng lênh sau, chú ý là cần đứng trong thư mục chứa mã nguồn pythonbackenddemo khi chạy lệnh này
+### Project Structure
+This project has four major parts :
+1. model.py - This contains code fot our Machine Learning model to predict employee salaries absed on trainign data in 'hiring.csv' file.
+2. app.py - This contains Flask APIs that receives employee details through GUI or API calls, computes the precited value based on our model and returns it.
+3. template - This folder contains the HTML template (index.html) to allow user to enter employee detail and displays the predicted employee salary.
+4. static - This folder contains the css folder with style.css file which has the styling required for out index.html file.
 
-        python3 house3d_worker_demo.py
+### Running the project
+1. Ensure that you are in the project home directory. Create the machine learning model by running below command from command prompt -
+```
+python model.py
+```
+This would create a serialized version of our model into a file model.pkl
 
-# Chạy ứng dụng trong docker container 
-### B1. Clone mã nguồn và chuyển về nhánh 6-gunicorn-flask
+2. Run app.py using below command to start Flask API
+```
+python app.py
+```
+By default, flask will run on port 5000.
 
-        git clone https://github.com/vimentor-com/pythonbackenddemo.git
-        cd pythonbackenddemo
-        git checkout 6-gunicorn-flask
+3. Navigate to URL http://127.0.0.1:5000/ (or) http://localhost:5000
 
-### B2. Build docker image với lệnh
+You should be able to view the homepage.
 
-        sudo docker build . -t demoimg:v0.2
+Enter valid numerical values in all 3 input boxes and hit Predict.
 
-### B2. Khởi chạy docker container 
+If everything goes well, you should  be able to see the predcited salary vaule on the HTML page!
+check the output here: http://127.0.0.1:5000/predict
 
-        sudo docker run -it --name='pythonbackenddemo' -p 8000:8000 demoimg:v0.2 bash
-
-Log xuất hiện trên màn hình sau khi chạy docker container
-
-        [2019-02-28 01:44:38 -0700] [6] [INFO] Starting gunicorn 19.9.0
-        [2019-02-28 01:44:38 -0700] [6] [INFO] Listening at: http://127.0.0.1:8000 (6)
-        [2019-02-28 01:44:38 -0700] [6] [INFO] Using worker: threads
-        [2019-02-28 01:44:38 -0700] [9] [INFO] Booting worker with pid: 9
-        [2019-02-28 01:44:38 -0700] [17] [INFO] Booting worker with pid: 17
-        [2019-02-28 01:44:38 -0700] [26] [INFO] Booting worker with pid: 26
